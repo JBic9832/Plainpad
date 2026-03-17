@@ -1,18 +1,16 @@
 #include "Buffers/TextFile.h"
+#include <atomic>
 #include <iostream>
-#include <string>
+#include <thread>
+#include "GUI/Window/Window.h"
 
-int main() {
+std::atomic<bool> running = true;
 
-    bool running = true;
+void RunLogic() {
     bool insert;
-
     TextFile file{};
 
     while (running) {
-        char ioe;
-
-
         std::string input;
         std::getline(std::cin, input);
 
@@ -45,6 +43,22 @@ int main() {
         std::cout << count<< " " << l << std::endl;
         ++count;
     }
+}
+
+int main() {
+    Window win{"Plainpad", 800, 600};
+
+    std::thread t{RunLogic};
+
+    while (running) {
+        running = !win.ShouldClose();
+        win.BeginFrame();
+        win.EndFrame();
+        win.PollEvents();
+    }
+
+    t.join();
+
 
     return 0;
 }
