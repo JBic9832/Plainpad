@@ -11,6 +11,9 @@ public:
 
     GLFWwindow* GetHandle() const;
 
+	int GetWidth() const;
+	int GetHeight() const;
+
     bool ShouldClose() const;
 
     void BeginFrame() const;

@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.29)
 
 project(Plainpad)
 
+set(FREETYPE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/freetype")
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
@@ -11,6 +12,7 @@ add_subdirectory(thirdparty/glfw-3.4)
 add_subdirectory(thirdparty/glad)
 add_subdirectory(thirdparty/glm)
 add_subdirectory(thirdparty/imgui)
+add_subdirectory(${FREETYPE_DIR} ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/freetype EXCLUDE_FROM_ALL)
 
 find_package(OpenGL REQUIRED)
 
@@ -27,4 +29,4 @@ target_sources("${CMAKE_PROJECT_NAME}" PRIVATE ${MY_SOURCES} )
 
 target_include_directories("${CMAKE_PROJECT_NAME}" PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include/")
 
-target_link_libraries("${CMAKE_PROJECT_NAME}" PRIVATE glfw glad OpenGL::GL imgui glm)
+target_link_libraries("${CMAKE_PROJECT_NAME}" PRIVATE glfw glad OpenGL::GL imgui glm freetype)

@@ -12,7 +12,9 @@ void TextFile::EditLine(size_t position, const std::string& text) {
     }
 
     auto it = GetLineIterator(position);
+	std::unique_lock<std::mutex> ul {mMutex};
     *it = text;
+	ul.unlock();
 }
 
 void TextFile::InsertLine(size_t position, const std::string& text) {
@@ -22,7 +24,10 @@ void TextFile::InsertLine(size_t position, const std::string& text) {
     }
 
     auto it = GetLineIterator(position);
+	++it;
+	std::unique_lock<std::mutex> ul {mMutex};
     mLines.insert(it, text);
+	ul.unlock(); 
 }
 
 std::list<std::string>::iterator TextFile::GetLineIterator(size_t position) {
@@ -36,5 +41,7 @@ std::list<std::string>::iterator TextFile::GetLineIterator(size_t position) {
 }
 
 std::list<std::string> TextFile::GetLines() const {
-    return mLines;
+	std::lock_guard<std::mutex> lock(mMutex);
+	std::list<std::string> lines = mLines;
+    return lines;
 }

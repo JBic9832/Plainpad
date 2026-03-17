@@ -37,6 +37,14 @@ bool Window::ShouldClose() const {
     return glfwWindowShouldClose(mWindowHandle);
 }
 
+int Window::GetWidth() const {
+	return mWidth;
+}
+
+int Window::GetHeight() const {
+	return mHeight;
+}
+
 void Window::BeginFrame() const {
     glClear(GL_COLOR_BUFFER_BIT);
 }

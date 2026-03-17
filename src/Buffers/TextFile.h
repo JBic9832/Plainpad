@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <list>
+#include <mutex>
 
 // Use an edit buffer then when editing is done copy the contents into the lines buffer
 class TextFile {
@@ -16,6 +17,7 @@ public:
     std::list<std::string> GetLines() const;
 
 private:
+	mutable std::mutex mMutex;
     std::list<std::string> mLines;
 
 };
