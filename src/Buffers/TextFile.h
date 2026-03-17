@@ -8,6 +8,9 @@ public:
     TextFile();
     ~TextFile();
 
+    // Modify an existing line
+    void EditLine(size_t position, const std::string& text);
+    // Insert a new line 
     void InsertLine(size_t position, const std::string& text);
     std::list<std::string>::iterator GetLineIterator(size_t position);
     std::list<std::string> GetLines() const;

@@ -5,8 +5,17 @@
 TextFile::TextFile() { }
 TextFile::~TextFile() { }
 
+void TextFile::EditLine(size_t position, const std::string& text) {
+    if (position >= mLines.size()) {
+        std::cout << "That line number DNE." << std::endl;
+        return;
+    }
+
+    auto it = GetLineIterator(position);
+    *it = text;
+}
+
 void TextFile::InsertLine(size_t position, const std::string& text) {
-    std::cout << "Inserting at line " << position << std::endl;
     if (position >= mLines.size()) {
         mLines.push_back(text);
         return;

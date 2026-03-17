@@ -5,10 +5,14 @@
 int main() {
 
     bool running = true;
+    bool insert;
 
     TextFile file{};
 
     while (running) {
+        char ioe;
+
+
         std::string input;
         std::getline(std::cin, input);
 
@@ -21,10 +25,19 @@ int main() {
             continue; 
         }
 
-        int line = static_cast<int>(input[0] - '0');
-        std::string text = input.substr(1);
+        if (input[0] == 'i') {
+            insert = true;
+        } else {
+            insert = false;
+        }
 
-        file.InsertLine(line, text);
+        int line = static_cast<int>(input[1] - '0');
+        std::string text = input.substr(2);
+
+        if (insert) 
+            file.InsertLine(line, text);
+        else
+            file.EditLine(line, text);
     }
 
     int count = 1;
