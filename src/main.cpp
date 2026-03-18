@@ -1,17 +1,15 @@
-#include "Buffers/TextFile.h"
 #include <atomic>
 #include <iostream>
 #include <thread>
-#include <vector>
 #include <map>
-#include <memory>
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
 #include <glm/glm.hpp>
 
+#include "Buffers/TextFile.h"
 #include "GUI/Window/Window.h"
-#include "Rendering/Shader.h"
+#include "GUI/Rendering/Shader.h"
 
 
 std::atomic<bool> running = true;
@@ -191,7 +189,7 @@ int main() {
         win.BeginFrame();
 		win.DrawDecorations();
 
-		int lineNumber = 0;
+		int lineNumber = 1;
 		for (const auto& line : file.GetLines()) {
 			float relPos = ((fHeight + 3) * lineNumber);
 			float pos = relPos - (static_cast<float>(win.GetHeight()) - relPos);
