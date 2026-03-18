@@ -11,6 +11,8 @@ public:
 
     GLFWwindow* GetHandle() const;
 
+	void DrawDecorations();
+
 	int GetWidth() const;
 	int GetHeight() const;
 

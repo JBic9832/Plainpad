@@ -21,7 +21,9 @@ void RunLogic(TextFile& file) {
 
     while (running) {
         std::string input;
-        std::getline(std::cin, input);
+        if(!std::getline(std::cin, input)) {
+			break;
+		}
 
         if (input.empty()) {
             continue; 
@@ -123,7 +125,7 @@ int main() {
     Window win{"Plainpad", 800, 600};
 
 	TextFile file;
-    std::thread t{RunLogic, std::ref(file)};
+    std::jthread t{RunLogic, std::ref(file)};
 
 	FT_Library ft;
 	if (FT_Init_FreeType(&ft)) {
@@ -187,6 +189,7 @@ int main() {
         running = !win.ShouldClose();
 		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
         win.BeginFrame();
+		win.DrawDecorations();
 
 		int lineNumber = 0;
 		for (const auto& line : file.GetLines()) {
@@ -199,9 +202,6 @@ int main() {
         win.EndFrame();
         win.PollEvents();
     }
-
-    t.join();
-
 
     return 0;
 }
