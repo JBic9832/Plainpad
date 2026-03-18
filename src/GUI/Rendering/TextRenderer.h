@@ -12,7 +12,7 @@ struct Character {
 
 class TextRenderer {
 public:
-    TextRenderer();
+    TextRenderer(const std::string& font);
     
     void RenderText(Shader &s, std::string text, float x, float y, float scale, glm::vec3 color);
     
@@ -21,6 +21,5 @@ private:
     Shader mFontShader;
     std::map<char, Character> mCharacters;
 
-    void generateBitmap();
-
+    void generateBitmap(const std::string& fontFile);
 };
