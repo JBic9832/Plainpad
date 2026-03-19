@@ -5,11 +5,16 @@
 
 #include <iostream>
 
-TextRenderer::TextRenderer(const std::string& font) {
+TextRenderer::TextRenderer(const std::string& font, int glyphHeight) : mGlyphHeight {glyphHeight} {
+	mFontShader = Shader{RESOURCES_PATH "shaders/text.vs", RESOURCES_PATH "shaders/text.fs"};
+	mFontShader.Bind();
+	glm::mat4 projection = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f);
+	mFontShader.setUniformMatrix4f("projection", projection);
+
     generateBitmap(font);
 }
 
-void TextRenderer::RenderText(Shader &s, std::string text, float x, float y, float scale, glm::vec3 color) {
+void TextRenderer::RenderText(std::string text, float x, float y, float scale, glm::vec3 color) {
 	unsigned int VAO, VBO;
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
@@ -22,8 +27,8 @@ void TextRenderer::RenderText(Shader &s, std::string text, float x, float y, flo
 	glBindVertexArray(0);
 
     // activate corresponding render state	
-    s.Bind();
-	s.setUniformVec3f("textColor", {color.x, color.y, color.z});
+	mFontShader.Bind();
+	mFontShader.setUniformVec3f("textColor", {color.x, color.y, color.z});
     glActiveTexture(GL_TEXTURE0);
     glBindVertexArray(VAO);
 
@@ -63,6 +68,10 @@ void TextRenderer::RenderText(Shader &s, std::string text, float x, float y, flo
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
+int TextRenderer::GetGlyphHeight() const {
+	return mGlyphHeight;
+}
+
 void TextRenderer::generateBitmap(const std::string& fontFile) {
     FT_Library ft;
 	if (FT_Init_FreeType(&ft)) {
@@ -76,8 +85,7 @@ void TextRenderer::generateBitmap(const std::string& fontFile) {
         throw std::runtime_error("Failed to initialize font face!");
 	}
 
-	const int fHeight = 16;
-	FT_Set_Pixel_Sizes(face, 0, fHeight);
+	FT_Set_Pixel_Sizes(face, 0, mGlyphHeight);
 
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 

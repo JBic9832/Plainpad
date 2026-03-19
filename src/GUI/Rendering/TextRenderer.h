@@ -12,14 +12,17 @@ struct Character {
 
 class TextRenderer {
 public:
-    TextRenderer(const std::string& font);
+    TextRenderer(const std::string& font, int glyphHeight);
     
-    void RenderText(Shader &s, std::string text, float x, float y, float scale, glm::vec3 color);
+    void RenderText(std::string text, float x, float y, float scale, glm::vec3 color);
+    int GetGlyphHeight() const;
     
 
 private:
+    unsigned int mVAO, mVBO;
     Shader mFontShader;
     std::map<char, Character> mCharacters;
+    int mGlyphHeight;
 
     void generateBitmap(const std::string& fontFile);
 };
