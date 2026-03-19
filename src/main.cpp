@@ -7,11 +7,13 @@
 #include "Buffers/TextFile.h"
 #include "GUI/Window/Window.h"
 #include "GUI/Rendering/TextRenderer.h"
+#include "GUI/Rendering/Cursor.h"
 
 std::atomic<bool> running = true;
 
 void RunLogic(TextFile& file) {
     bool insert;
+
 
     while (running) {
         std::string input;
@@ -59,6 +61,8 @@ int main() {
     TextRenderer tr {RESOURCES_PATH "fonts/Arial.TTF", 24};
     const int fHeight = tr.GetGlyphHeight();
 
+	Cursor cursor;
+	cursor.SetCursorHeight(fHeight);
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -75,6 +79,8 @@ int main() {
 			tr.RenderText(line, 15.0f, static_cast<float>(win.GetHeight()) - relPos - fHeight, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
 			++lineNumber;
 		}
+
+		cursor.Draw({13.0f, fHeight});
 
         win.EndFrame();
         win.PollEvents();

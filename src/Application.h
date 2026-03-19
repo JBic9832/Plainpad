@@ -6,6 +6,11 @@
 
 #include "Buffers/TextFile.h"
 
+enum ApplicationMode {
+	NORMAL = 0,
+	INSERT
+};
+
 class Application {
 public:
     Application();
@@ -17,6 +22,8 @@ public:
 private:
     glm::ivec2 mCursorPos;
     std::shared_ptr<TextFile> mTextFile;
+	ApplicationMode mAppMode;
 
     void processInput();
+	void drawCursor();
 };

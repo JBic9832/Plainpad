@@ -2,7 +2,7 @@
 #include <stdexcept>
 #include <iostream>
 
-TextFile::TextFile() { }
+TextFile::TextFile() : mActiveLine {mLines.begin()} { }
 TextFile::~TextFile() { }
 
 void TextFile::EditLine(size_t position, const std::string& text) {
@@ -45,3 +45,43 @@ std::list<std::string> TextFile::GetLines() const {
 	std::list<std::string> lines = mLines;
     return lines;
 }
+
+void TextFile::PullLineToEditBuffer(std::list<std::string>::iterator target) {
+	// Flush before pulling a new line
+	flushEditBuffer();
+
+	mActiveLine = target;
+	mEditBuffer = *mActiveLine;
+	mEditBufferDirty = false;
+}
+
+void TextFile::flushEditBuffer() {
+	if (mEditBufferDirty) {
+		*mActiveLine = mEditBuffer;
+		mEditBufferDirty = false;
+	}
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
