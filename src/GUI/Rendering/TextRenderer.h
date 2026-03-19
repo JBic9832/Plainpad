@@ -12,7 +12,7 @@ struct Character {
 
 class TextRenderer {
 public:
-    TextRenderer(const std::string& font, int glyphHeight);
+    TextRenderer(const std::string& font, int glyphHeight, glm::mat4 projection);
     
     void RenderText(std::string text, float x, float y, float scale, glm::vec3 color);
     int GetGlyphHeight() const;

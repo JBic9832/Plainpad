@@ -54,15 +54,19 @@ void RunLogic(TextFile& file) {
 
 int main() {
     Window win{"Plainpad", 800, 600};
+	glm::mat4 projection = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f);
 
 	TextFile file;
     std::jthread t{RunLogic, std::ref(file)};
 
-    TextRenderer tr {RESOURCES_PATH "fonts/Arial.TTF", 24};
+    TextRenderer tr {RESOURCES_PATH "fonts/Arial.TTF", 24, projection};
     const int fHeight = tr.GetGlyphHeight();
 
+    Shader cursorShader{RESOURCES_PATH "shaders/cursor.vs", RESOURCES_PATH "shaders/cursor.fs"};
 	Cursor cursor;
 	cursor.SetCursorHeight(fHeight);
+    cursorShader.Bind();
+    cursorShader.setUniformMatrix4f("projection", projection);
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -80,7 +84,9 @@ int main() {
 			++lineNumber;
 		}
 
-		cursor.Draw({13.0f, fHeight});
+        cursorShader.Bind();
+        cursorShader.setUniformFloat("time", glfwGetTime());
+		cursor.Draw({15.0f, win.GetHeight() - (fHeight + 3)});
 
         win.EndFrame();
         win.PollEvents();

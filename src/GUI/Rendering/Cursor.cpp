@@ -1,10 +1,20 @@
 #include "Cursor.h"
+#include "glad/glad.h"
 
-unsigned int vao, vbo;
+unsigned int vao, vbo, ebo;
 
 Cursor::Cursor() {
 	glGenVertexArrays(1, &vao);
 	glGenBuffers(1, &vbo);
+	glGenBuffers(1, &ebo);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+
+	unsigned int indices[6] = {
+		0, 1, 2,
+		0, 2, 3
+	};
+
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_DYNAMIC_DRAW);
 
 	glBindVertexArray(vao);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
@@ -23,10 +33,13 @@ void Cursor::Draw(glm::vec2 position) {
 		position.x,          position.y - mHeight
 	};
 
+
+	glBindVertexArray(vao);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
 
-	glDrawArrays(GL_TRIANGLES, 0, 8);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (void*)0);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }

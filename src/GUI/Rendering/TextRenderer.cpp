@@ -5,10 +5,9 @@
 
 #include <iostream>
 
-TextRenderer::TextRenderer(const std::string& font, int glyphHeight) : mGlyphHeight {glyphHeight} {
+TextRenderer::TextRenderer(const std::string& font, int glyphHeight, glm::mat4 projection) : mGlyphHeight {glyphHeight} {
 	mFontShader = Shader{RESOURCES_PATH "shaders/text.vs", RESOURCES_PATH "shaders/text.fs"};
 	mFontShader.Bind();
-	glm::mat4 projection = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f);
 	mFontShader.setUniformMatrix4f("projection", projection);
 
     generateBitmap(font);
