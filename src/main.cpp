@@ -1,17 +1,12 @@
-#include "GUI/Rendering/TextRenderer.h"
 #include <atomic>
 #include <iostream>
 #include <thread>
-#include <map>
 
-#include <ft2build.h>
-#include FT_FREETYPE_H
 #include <glm/glm.hpp>
 
 #include "Buffers/TextFile.h"
 #include "GUI/Window/Window.h"
-#include "GUI/Rendering/Shader.h"
-
+#include "GUI/Rendering/TextRenderer.h"
 
 std::atomic<bool> running = true;
 
@@ -60,8 +55,6 @@ int main() {
 
 	TextFile file;
     std::jthread t{RunLogic, std::ref(file)};
-
-	Shader fontShader {RESOURCES_PATH "shaders/text.vs", RESOURCES_PATH "shaders/text.fs"};
 
     TextRenderer tr {RESOURCES_PATH "fonts/Arial.TTF", 24};
     const int fHeight = tr.GetGlyphHeight();
