@@ -16,7 +16,10 @@ add_subdirectory(${FREETYPE_DIR} ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/freetype
 
 find_package(OpenGL REQUIRED)
 
-file(GLOB_RECURSE MY_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
+file(GLOB_RECURSE MY_SOURCES CONFIGURE_DEPENDS 
+	"${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
+	"${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
+)
 
 add_executable("${CMAKE_PROJECT_NAME}")
 
@@ -27,6 +30,9 @@ target_compile_definitions("${CMAKE_PROJECT_NAME}" PUBLIC RESOURCES_PATH="${CMAK
 
 target_sources("${CMAKE_PROJECT_NAME}" PRIVATE ${MY_SOURCES} )
 
-target_include_directories("${CMAKE_PROJECT_NAME}" PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include/")
+target_include_directories("${CMAKE_PROJECT_NAME}" PUBLIC 
+	"${CMAKE_CURRENT_SOURCE_DIR}/include/"
+	"${CMAKE_CURRENT_SOURCE_DIR}/src/"
+)
 
 target_link_libraries("${CMAKE_PROJECT_NAME}" PRIVATE glfw glad OpenGL::GL imgui glm freetype)

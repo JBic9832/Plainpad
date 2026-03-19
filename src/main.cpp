@@ -8,6 +8,7 @@
 #include "GUI/Window/Window.h"
 #include "GUI/Rendering/TextRenderer.h"
 #include "GUI/Rendering/Cursor.h"
+#include "Buffers/Line.h"
 
 std::atomic<bool> running = true;
 
@@ -45,11 +46,11 @@ void RunLogic(TextFile& file) {
             file.EditLine(line, text);
     }
 
-    int count = 1;
-    for (const auto& l : file.GetLines()) {
-        std::cout << count<< " " << l << std::endl;
-        ++count;
-    }
+    //int count = 1;
+    //for (const auto& l : file.GetLines()) {
+    //    std::cout << count<< " " << l << std::endl;
+    //    ++count;
+    //}
 }
 
 int main() {
@@ -59,8 +60,10 @@ int main() {
 	TextFile file;
     std::jthread t{RunLogic, std::ref(file)};
 
-    TextRenderer tr {RESOURCES_PATH "fonts/Arial.TTF", 24, projection};
-    const int fHeight = tr.GetGlyphHeight();
+	FontMap::GenerateFontMapping(RESOURCES_PATH "fonts/Arial.TTF", 24);
+
+    TextRenderer tr {projection};
+    const int fHeight = FontMap::GetGlyphHeight();
 
     Shader cursorShader{RESOURCES_PATH "shaders/cursor.vs", RESOURCES_PATH "shaders/cursor.fs"};
 	Cursor cursor;

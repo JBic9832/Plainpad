@@ -13,7 +13,8 @@ void TextFile::EditLine(size_t position, const std::string& text) {
 
     auto it = GetLineIterator(position);
 	std::unique_lock<std::mutex> ul {mMutex};
-    *it = text;
+	Line l{text};
+    *it = l;
 	ul.unlock();
 }
 
@@ -26,11 +27,12 @@ void TextFile::InsertLine(size_t position, const std::string& text) {
     auto it = GetLineIterator(position);
 	++it;
 	std::unique_lock<std::mutex> ul {mMutex};
-    mLines.insert(it, text);
+	Line l {text};
+    mLines.insert(it, l);
 	ul.unlock(); 
 }
 
-std::list<std::string>::iterator TextFile::GetLineIterator(size_t position) {
+std::list<Line>::iterator TextFile::GetLineIterator(size_t position) {
     if (position >= mLines.size()) {
         throw std::out_of_range("Line index out of range!");
     }
@@ -40,13 +42,13 @@ std::list<std::string>::iterator TextFile::GetLineIterator(size_t position) {
     return it;
 }
 
-std::list<std::string> TextFile::GetLines() const {
+std::list<Line> TextFile::GetLines() const {
 	std::lock_guard<std::mutex> lock(mMutex);
-	std::list<std::string> lines = mLines;
+	std::list<Line> lines = mLines;
     return lines;
 }
 
-void TextFile::PullLineToEditBuffer(std::list<std::string>::iterator target) {
+void TextFile::PullLineToEditBuffer(std::list<Line>::iterator target) {
 	// Flush before pulling a new line
 	flushEditBuffer();
 
