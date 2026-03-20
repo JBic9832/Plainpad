@@ -16,6 +16,7 @@ public:
 	void InsertCharacter(Character c, std::list<Character>::iterator position);
 	std::list<Character>::iterator GetIteratorAtPosition(size_t position);
 	std::vector<float> mOffsets;
+	float GetOffset(int col);
 
 private:
 	std::list<Character> mCharacters;

@@ -89,6 +89,12 @@ int main() {
 		cursor.Draw({col, 0}, file.GetLineIterator(0), win.GetHeight());
 
         if (glfwGetKey(win.GetHandle(), GLFW_KEY_RIGHT) == GLFW_PRESS && !pressed) {
+            auto it = file.GetLineIterator(0);
+            for (auto c : it->GetCharacters()) {
+                std::cout << c.Char;
+            }
+            std::cout << std::endl;
+            std::cout << col << std::endl;
             ++col;
             pressed = true;
         }

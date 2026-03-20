@@ -44,7 +44,8 @@ void FontMap::GenerateFontMapping(const std::string& fontFile, int glyphHeight) 
 			texture,
 			glm::ivec2 {face->glyph->bitmap.width, face->glyph->bitmap.rows},
 			glm::ivec2 {face->glyph->bitmap_left, face->glyph->bitmap_top},
-			static_cast<unsigned int>(face->glyph->advance.x)
+			static_cast<unsigned int>(face->glyph->advance.x),
+			char(c)
 		};
 
 		sCharacterMap.insert(std::pair<char, Character>(c, character));

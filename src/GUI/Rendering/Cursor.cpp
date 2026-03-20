@@ -34,7 +34,7 @@ Cursor::Cursor() {
 
 void Cursor::Draw(glm::ivec2 iPos, std::list<Line>::iterator activeLine, float winOffset) {
 	Line currentLine = *activeLine;
-	glm::vec2 position = {currentLine.mOffsets[iPos.x] + 15.0f, winOffset - (iPos.y + FontMap::GetGlyphHeight() + (mHeight / 8))};
+	glm::vec2 position = {currentLine.GetOffset(iPos.x) + 15.0f, winOffset - (iPos.y + FontMap::GetGlyphHeight() + (mHeight / 8))};
 	//std::cout << "Trying to draw cursor at: " << position.x << ", " << position.y << std::endl;
 	float vertices[8] = {
 		position.x,          position.y,

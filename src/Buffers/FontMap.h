@@ -11,6 +11,7 @@ struct Character {
     glm::ivec2 Size;
     glm::ivec2 Bearing;
     unsigned int Advance;
+	char Char;
 };
 
 class FontMap {
