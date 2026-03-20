@@ -8,7 +8,6 @@
 #include "GUI/Window/Window.h"
 #include "GUI/Rendering/TextRenderer.h"
 #include "GUI/Rendering/Cursor.h"
-#include "Buffers/Line.h"
 
 std::atomic<bool> running = true;
 
@@ -67,29 +66,36 @@ int main() {
 
     Shader cursorShader{RESOURCES_PATH "shaders/cursor.vs", RESOURCES_PATH "shaders/cursor.fs"};
 	Cursor cursor;
-	cursor.SetCursorHeight(fHeight);
+	cursor.SetCursorHeight(fHeight + 4);
     cursorShader.Bind();
     cursorShader.setUniformMatrix4f("projection", projection);
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    file.InsertLine(0, "This is a test for cursor...");
+    int col = 0;
+    bool pressed = false;
     while (running) {
         running = !win.ShouldClose();
 		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
         win.BeginFrame();
 		win.DrawDecorations();
 
-		int lineNumber = 1;
-		for (const auto& line : file.GetLines()) {
-			float relPos = ((fHeight + 3) * lineNumber);
-			float pos = relPos - (static_cast<float>(win.GetHeight()) - relPos);
-			tr.RenderText(line, 15.0f, static_cast<float>(win.GetHeight()) - relPos - fHeight, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
-			++lineNumber;
-		}
+        tr.RenderFile(file, {0.0f, 0.0f, 0.0f}, win);
 
         cursorShader.Bind();
         cursorShader.setUniformFloat("time", glfwGetTime());
-		cursor.Draw({15.0f, win.GetHeight() - (fHeight + 3)});
+		cursor.Draw({col, 0}, file.GetLineIterator(0), win.GetHeight());
+
+        if (glfwGetKey(win.GetHandle(), GLFW_KEY_RIGHT) == GLFW_PRESS && !pressed) {
+            ++col;
+            pressed = true;
+        }
+
+        if (glfwGetKey(win.GetHandle(), GLFW_KEY_RIGHT) == GLFW_RELEASE) {
+            pressed = false;
+        }
 
         win.EndFrame();
         win.PollEvents();

@@ -10,7 +10,7 @@ TextRenderer::TextRenderer(glm::mat4 projection) {
 	mFontShader.setUniformMatrix4f("projection", projection);
 }
 
-void TextRenderer::RenderText(const Line& line, float x, float y, float scale, glm::vec3 color) {
+void TextRenderer::RenderLine(Line& line, float x, float y, float scale, glm::vec3 color) {
 	unsigned int VAO, VBO;
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
@@ -60,4 +60,13 @@ void TextRenderer::RenderText(const Line& line, float x, float y, float scale, g
     }
     glBindVertexArray(0);
     glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+void TextRenderer::RenderFile(TextFile& file, glm::vec3 color, const Window& win) {
+    int lineNumber = 1;
+    for (auto& line : file.GetLines()) {
+        float relPos = ((FontMap::GetGlyphHeight() + 3) * lineNumber);
+		RenderLine(line, 15.0f, static_cast<float>(win.GetHeight()) - relPos - FontMap::GetGlyphHeight(), 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+		++lineNumber;
+    }
 }

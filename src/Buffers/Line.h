@@ -1,6 +1,7 @@
 #pragma once
 
 #include <list>
+#include <vector>
 
 #include "FontMap.h"
 
@@ -14,6 +15,7 @@ public:
 	void AddCharacter(Character c);
 	void InsertCharacter(Character c, std::list<Character>::iterator position);
 	std::list<Character>::iterator GetIteratorAtPosition(size_t position);
+	std::vector<float> mOffsets;
 
 private:
 	std::list<Character> mCharacters;

@@ -1,5 +1,7 @@
 #include "Cursor.h"
-#include "glad/glad.h"
+#include "Buffers/FontMap.h"
+#include <glad/glad.h>
+#include <iostream>
 
 unsigned int vao, vbo, ebo;
 
@@ -9,9 +11,14 @@ Cursor::Cursor() {
 	glGenBuffers(1, &ebo);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
 
+	//unsigned int indices[6] = {
+	//	0, 1, 2,
+	//	0, 2, 3
+	//};
+
 	unsigned int indices[6] = {
-		0, 1, 2,
-		0, 2, 3
+		3, 0, 1,
+		3, 1, 2
 	};
 
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_DYNAMIC_DRAW);
@@ -25,7 +32,10 @@ Cursor::Cursor() {
 
 }
 
-void Cursor::Draw(glm::vec2 position) {
+void Cursor::Draw(glm::ivec2 iPos, std::list<Line>::iterator activeLine, float winOffset) {
+	Line currentLine = *activeLine;
+	glm::vec2 position = {currentLine.mOffsets[iPos.x] + 15.0f, winOffset - (iPos.y + FontMap::GetGlyphHeight() + (mHeight / 8))};
+	//std::cout << "Trying to draw cursor at: " << position.x << ", " << position.y << std::endl;
 	float vertices[8] = {
 		position.x,          position.y,
 		position.x + mWidth, position.y,
