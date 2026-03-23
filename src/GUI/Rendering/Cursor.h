@@ -14,5 +14,6 @@ public:
 
 private:
 	float mHeight;
-	float mWidth = 2.0f;
+	float mWidth = 1.0f;
+	float mHangOver = 1.0f;
 };

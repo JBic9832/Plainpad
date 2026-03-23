@@ -16,9 +16,14 @@ Cursor::Cursor() {
 	//	0, 2, 3
 	//};
 
+	// unsigned int indices[6] = {
+	// 	3, 0, 1,
+	// 	3, 1, 2
+	// };
+
 	unsigned int indices[6] = {
-		3, 0, 1,
-		3, 1, 2
+          0, 3, 2,
+          0, 2, 1
 	};
 
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_DYNAMIC_DRAW);
@@ -29,19 +34,18 @@ Cursor::Cursor() {
 	glVertexAttribPointer(0, 2, GL_FLOAT, false, 2 * sizeof(float), (void*)0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
-
 }
 
 void Cursor::Draw(glm::ivec2 iPos, LineStructure_t::iterator activeLine, float winOffset) {
 	Line currentLine = **activeLine;
 	glm::vec2 position = {currentLine.GetOffset(iPos.x) + currentLine.GetLocation().x, currentLine.GetLocation().y};
-	std::cout << "Current Line Pos {" << (*activeLine)->GetLocation().x << " , " << (*activeLine)->GetLocation().y << "}\n";
+
 	//std::cout << "Trying to draw cursor at: " << position.x << ", " << position.y << std::endl;
 	float vertices[8] = {
-		position.x,          position.y,
-		position.x + mWidth, position.y,
-		position.x + mWidth, position.y - mHeight,
-		position.x,          position.y - mHeight
+		position.x,          position.y - currentLine.GetMaxDescender() - mHangOver,
+		position.x - mWidth, position.y - currentLine.GetMaxDescender() - mHangOver,
+		position.x - mWidth, position.y + mHeight + (currentLine.GetMaxAscender() - mHeight) + mHangOver,
+		position.x,          position.y + mHeight + (currentLine.GetMaxAscender() - mHeight) + mHangOver
 	};
 
 

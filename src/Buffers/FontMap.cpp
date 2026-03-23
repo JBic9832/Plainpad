@@ -4,6 +4,8 @@
 
 int FontMap::sGlyphHeight;
 std::map<char, Character> FontMap::sCharacterMap;
+float FontMap::sHeightMax = 0;
+float FontMap::sHeightMin = 0;
 
 void FontMap::GenerateFontMapping(const std::string& fontFile, int glyphHeight) {
 	sGlyphHeight = glyphHeight;
@@ -48,11 +50,19 @@ void FontMap::GenerateFontMapping(const std::string& fontFile, int glyphHeight) 
 			char(c)
 		};
 
+		float ascender = character.Bearing.y;
+		float descender = character.Size.y - character.Bearing.y;
+
+		sHeightMax = std::max(sHeightMax, ascender);
+		sHeightMin = std::max(sHeightMin, descender);
+
 		sCharacterMap.insert(std::pair<char, Character>(c, character));
 	}
 
 	glBindTexture(GL_TEXTURE_2D, 0);
 
+	std::cout << "Max Ascender: " << sHeightMax << ", Max Descender: " << sHeightMin << std::endl;
+	
 	FT_Done_Face(face);
 	FT_Done_FreeType(ft);
 }
@@ -65,3 +75,10 @@ int FontMap::GetGlyphHeight() {
 	return sGlyphHeight;
 }
 
+float FontMap::GetMinDescender() {
+	return sHeightMin;
+}
+
+float FontMap::GetMaxAscender() {
+	return sHeightMax;
+}

@@ -11,7 +11,14 @@ Line::Line(const std::string& content) {
 	mOffsets = std::vector<float>(255);
 	mOffsets[0] = 0.0f;
 	for (char c : content) {
-		mCharacters.push_back(FontMap::GetCharacterMapping()[c]);
+		Character ch = FontMap::GetCharacterMapping()[c];
+		mCharacters.push_back(ch);
+
+		float ascender = ch.Bearing.y;
+		float descender = ch.Size.y - ch.Bearing.y;
+
+		mMaxAscender = std::max(mMaxAscender, ascender);
+		mMaxDescender = std::max(mMaxDescender, descender);
 	}
 }
 
@@ -44,6 +51,13 @@ glm::vec2 Line::GetLocation() const {
 }
 
 void Line::SetLocation(glm::vec2 location) {
-	std::cout << "Settings location to: " << location.x << ", " << location.y << std::endl;
 	mLocation = location;
+}
+
+float Line::GetMaxDescender() const {
+	return mMaxDescender;
+}
+
+float Line::GetMaxAscender() const {
+	return mMaxAscender;
 }

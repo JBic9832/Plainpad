@@ -19,9 +19,12 @@ public:
 	float GetOffset(int col);
 	glm::vec2 GetLocation() const;
 	void SetLocation(glm::vec2 location);
+	float GetMaxDescender() const;
+	float GetMaxAscender() const;
 
 private:
 	std::list<Character> mCharacters;
 	glm::vec2 mLocation{0};
+	float mMaxDescender, mMaxAscender;
 
 };

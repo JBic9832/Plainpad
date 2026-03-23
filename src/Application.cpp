@@ -18,15 +18,15 @@ Application::~Application() {}
 
 void Application::Run() {
 	FontMap::GenerateFontMapping(RESOURCES_PATH "fonts/Arial.TTF", 24);
-    Shader cursorShader{RESOURCES_PATH "shaders/cursor.vs", RESOURCES_PATH "shaders/cursor.fs"};
-	mCursor.SetCursorHeight(FontMap::GetGlyphHeight() + 4);
-    cursorShader.Bind();
-    cursorShader.setUniformMatrix4f("projection", mProjection);
+	Shader cursorShader{RESOURCES_PATH "shaders/cursor.vs", RESOURCES_PATH "shaders/cursor.fs"};
+	mCursor.SetCursorHeight(FontMap::GetGlyphHeight());
+	cursorShader.Bind();
+	cursorShader.setUniformMatrix4f("projection", mProjection);
 
 	// Test lines
 	mTextFile->InsertLine(0, "This is a test for cursor...");
-    mTextFile->InsertLine(0, "This is a test for cursor...");
-    mTextFile->InsertLine(0, "This is a test for cursor...");
+	mTextFile->InsertLine(0, "This is a test for cursor...");
+	mTextFile->InsertLine(0, "This is a test for cursor...");
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

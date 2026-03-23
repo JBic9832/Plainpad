@@ -19,10 +19,16 @@ public:
 	static void GenerateFontMapping(const std::string& fontFile, int glyphHeight);
 	static std::map<char, Character> GetCharacterMapping();
 	static int GetGlyphHeight();
-
+	static float GetMinDescender();
+	static float GetMaxAscender();
 
 private:
 	static std::map<char, Character> sCharacterMap;
 	static int sGlyphHeight;
+	static float sHeightMax, sHeightMin;
+    
+  
+  
+  
 	
 };
