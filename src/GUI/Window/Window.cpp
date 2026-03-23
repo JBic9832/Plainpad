@@ -8,7 +8,9 @@
 
 #include <iostream>
 
-Window::Window(const std::string& windowName, int width, int height) : mWidth { width }, mHeight { height } {
+#include "GUI/Event/EventType.h"
+
+Window::Window(const std::string& windowName, int width, int height, EventSystem& e) : mWidth { width }, mHeight { height }, mEventSystem {e} {
     if (!glfwInit()) {
         std::cout << "Failed to init GLFW..." << std::endl;
         return;
@@ -34,6 +36,9 @@ Window::Window(const std::string& windowName, int width, int height) : mWidth { 
 
 	ImGui_ImplGlfw_InitForOpenGL(mWindowHandle, true);
 	ImGui_ImplOpenGL3_Init("#version 330");
+
+	glfwSetWindowUserPointer(mWindowHandle, this);
+	glfwSetKeyCallback(mWindowHandle, glfwKeyCallback);
 
 }
 
@@ -103,3 +108,37 @@ void Window::EndFrame() const {
 void Window::PollEvents() const {
     glfwPollEvents();
 }
+
+Window* Window::createWindowUserPointer(GLFWwindow* window) {
+	Window* win = static_cast<Window*>(glfwGetWindowUserPointer(window));
+	return win;
+}
+
+void Window::glfwKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+	Window* win = createWindowUserPointer(window);
+	if (win) {
+		win->SendKeyEvent(key, action);
+	}
+}
+
+void Window::SendKeyEvent(int key, int action) {
+	if (action == GLFW_PRESS) {
+		mEventSystem.Notify(KeyPressedEvent(key));
+	} else if (action == GLFW_RELEASE) {
+		mEventSystem.Notify(KeyReleasedEvent(key));
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

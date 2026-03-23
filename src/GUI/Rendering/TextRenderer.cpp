@@ -10,7 +10,7 @@ TextRenderer::TextRenderer(glm::mat4 projection) {
 	mFontShader.setUniformMatrix4f("projection", projection);
 }
 
-void TextRenderer::RenderLine(Line& line, float x, float y, float scale, glm::vec3 color) {
+void TextRenderer::RenderLine(std::shared_ptr<Line> line, float x, float y, float scale, glm::vec3 color) {
 	unsigned int VAO, VBO;
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
@@ -28,7 +28,7 @@ void TextRenderer::RenderLine(Line& line, float x, float y, float scale, glm::ve
     glActiveTexture(GL_TEXTURE0);
     glBindVertexArray(VAO);
 
-	auto characters = line.GetCharacters();
+	auto characters = line->GetCharacters();
     // iterate through all characters
     for (auto ch = characters.begin(); ch != characters.end(); ch++)
     {
@@ -66,7 +66,10 @@ void TextRenderer::RenderFile(TextFile& file, glm::vec3 color, const Window& win
     int lineNumber = 1;
     for (auto& line : file.GetLines()) {
         float relPos = ((FontMap::GetGlyphHeight() + 3) * lineNumber);
-		RenderLine(line, 15.0f, static_cast<float>(win.GetHeight()) - relPos - FontMap::GetGlyphHeight(), 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+		float xPos = 15.0f;
+		float yPos = static_cast<float>(win.GetHeight()) - relPos - FontMap::GetGlyphHeight();
+		RenderLine(line, xPos, yPos, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+		line->SetLocation({xPos, yPos});
 		++lineNumber;
     }
 }

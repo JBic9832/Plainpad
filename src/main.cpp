@@ -8,6 +8,7 @@
 #include "GUI/Window/Window.h"
 #include "GUI/Rendering/TextRenderer.h"
 #include "GUI/Rendering/Cursor.h"
+#include "Application.h"
 
 std::atomic<bool> running = true;
 
@@ -53,59 +54,63 @@ void RunLogic(TextFile& file) {
 }
 
 int main() {
-    Window win{"Plainpad", 800, 600};
-	glm::mat4 projection = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f);
+    //Window win{"Plainpad", 800, 600};
+	//glm::mat4 projection = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f);
 
-	TextFile file;
-    std::jthread t{RunLogic, std::ref(file)};
+	//TextFile file;
+    //std::jthread t{RunLogic, std::ref(file)};
 
-	FontMap::GenerateFontMapping(RESOURCES_PATH "fonts/Arial.TTF", 24);
+	//FontMap::GenerateFontMapping(RESOURCES_PATH "fonts/Arial.TTF", 24);
 
-    TextRenderer tr {projection};
-    const int fHeight = FontMap::GetGlyphHeight();
+    //TextRenderer tr {projection};
+    //const int fHeight = FontMap::GetGlyphHeight();
 
-    Shader cursorShader{RESOURCES_PATH "shaders/cursor.vs", RESOURCES_PATH "shaders/cursor.fs"};
-	Cursor cursor;
-	cursor.SetCursorHeight(fHeight + 4);
-    cursorShader.Bind();
-    cursorShader.setUniformMatrix4f("projection", projection);
+    //Shader cursorShader{RESOURCES_PATH "shaders/cursor.vs", RESOURCES_PATH "shaders/cursor.fs"};
+	//Cursor cursor;
+	//cursor.SetCursorHeight(fHeight + 4);
+    //cursorShader.Bind();
+    //cursorShader.setUniformMatrix4f("projection", projection);
 
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	//glEnable(GL_BLEND);
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    file.InsertLine(0, "This is a test for cursor...");
-    int col = 0;
-    bool pressed = false;
-    while (running) {
-        running = !win.ShouldClose();
-		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-        win.BeginFrame();
-		win.DrawDecorations();
+    //file.InsertLine(0, "This is a test for cursor...");
+    //int col = 0;
+    //bool pressed = false;
+    //while (running) {
+    //    running = !win.ShouldClose();
+	//	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+    //    win.BeginFrame();
+	//	win.DrawDecorations();
 
-        tr.RenderFile(file, {0.0f, 0.0f, 0.0f}, win);
+    //    tr.RenderFile(file, {0.0f, 0.0f, 0.0f}, win);
 
-        cursorShader.Bind();
-        cursorShader.setUniformFloat("time", glfwGetTime());
-		cursor.Draw({col, 0}, file.GetLineIterator(0), win.GetHeight());
+    //    cursorShader.Bind();
+    //    cursorShader.setUniformFloat("time", glfwGetTime());
+	//	cursor.Draw({col, 0}, file.GetLineIterator(0), win.GetHeight());
 
-        if (glfwGetKey(win.GetHandle(), GLFW_KEY_RIGHT) == GLFW_PRESS && !pressed) {
-            auto it = file.GetLineIterator(0);
-            for (auto c : it->GetCharacters()) {
-                std::cout << c.Char;
-            }
-            std::cout << std::endl;
-            std::cout << col << std::endl;
-            ++col;
-            pressed = true;
-        }
+    //    if (glfwGetKey(win.GetHandle(), GLFW_KEY_RIGHT) == GLFW_PRESS && !pressed) {
+    //        auto it = file.GetLineIterator(0);
+    //        for (auto c : it->GetCharacters()) {
+    //            std::cout << c.Char;
+    //        }
+    //        std::cout << std::endl;
+    //        std::cout << col << std::endl;
+    //        ++col;
+    //        pressed = true;
+    //    }
 
-        if (glfwGetKey(win.GetHandle(), GLFW_KEY_RIGHT) == GLFW_RELEASE) {
-            pressed = false;
-        }
+    //    if (glfwGetKey(win.GetHandle(), GLFW_KEY_RIGHT) == GLFW_RELEASE) {
+    //        pressed = false;
+    //    }
 
-        win.EndFrame();
-        win.PollEvents();
-    }
+    //    win.EndFrame();
+    //    win.PollEvents();
+    //}
+	//
+	EventSystem e;
+	Application app{e};
+	app.Run();
 
     return 0;
 }

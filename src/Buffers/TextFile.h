@@ -2,8 +2,11 @@
 #include <string>
 #include <list>
 #include <mutex>
+#include <memory>
 
 #include "Line.h"
+#include "Types.h"
+
 
 // Use an edit buffer then when editing is done copy the contents into the lines buffer
 class TextFile {
@@ -15,18 +18,18 @@ public:
     void EditLine(size_t position, const std::string& text);
     // Insert a new line 
     void InsertLine(size_t position, const std::string& text);
-    std::list<Line>::iterator GetLineIterator(size_t position);
-    std::list<Line> GetLines() const;
+    LineStructure_t::iterator GetLineIterator(size_t position);
+    LineStructure_t GetLines() const;
 	Line GetActiveLineBuffer() const;
-	void PullLineToEditBuffer(std::list<Line>::iterator target);
+	void PullLineToEditBuffer(LineStructure_t::iterator target);
 
 private:
 	void flushEditBuffer();
 
 private:
 	mutable std::mutex mMutex;
-    std::list<Line> mLines;
-	std::list<Line>::iterator mActiveLine;
+    std::list<std::shared_ptr<Line>> mLines;
+	std::list<std::shared_ptr<Line>>::iterator mActiveLine;
 	Line mEditBuffer;
 	bool mEditBufferDirty = false;
 

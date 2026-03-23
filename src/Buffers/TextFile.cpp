@@ -14,25 +14,25 @@ void TextFile::EditLine(size_t position, const std::string& text) {
     auto it = GetLineIterator(position);
 	Line l{text};
 	std::unique_lock<std::mutex> ul {mMutex};
-    *it = l;
+    **it = l;
 	ul.unlock();
 }
 
 void TextFile::InsertLine(size_t position, const std::string& text) {
+	Line l {text};
     if (position >= mLines.size()) {
-        mLines.push_back(text);
+        mLines.push_back(std::make_shared<Line>(l));
         return;
     }
 
     auto it = GetLineIterator(position);
 	++it;
-	Line l {text};
 	std::unique_lock<std::mutex> ul {mMutex};
-    mLines.insert(it, l);
+    mLines.insert(it, std::make_shared<Line>(l));
 	ul.unlock(); 
 }
 
-std::list<Line>::iterator TextFile::GetLineIterator(size_t position) {
+LineStructure_t::iterator TextFile::GetLineIterator(size_t position) {
     if (position >= mLines.size()) {
         throw std::out_of_range("Line index out of range!");
     }
@@ -42,28 +42,11 @@ std::list<Line>::iterator TextFile::GetLineIterator(size_t position) {
     return it;
 }
 
-std::list<Line> TextFile::GetLines() const {
+LineStructure_t TextFile::GetLines() const {
 	std::lock_guard<std::mutex> lock(mMutex);
-	std::list<Line> lines = mLines;
+	std::list<std::shared_ptr<Line>> lines = mLines;
     return lines;
 }
-
-void TextFile::PullLineToEditBuffer(std::list<Line>::iterator target) {
-	// Flush before pulling a new line
-	flushEditBuffer();
-
-	mActiveLine = target;
-	mEditBuffer = *mActiveLine;
-	mEditBufferDirty = false;
-}
-
-void TextFile::flushEditBuffer() {
-	if (mEditBufferDirty) {
-		*mActiveLine = mEditBuffer;
-		mEditBufferDirty = false;
-	}
-}
-
 
 
 

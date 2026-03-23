@@ -1,5 +1,6 @@
 #include "Line.h"
 #include <iterator>
+#include <iostream>
 
 Line::Line() {
 	mOffsets = std::vector<float>(255);
@@ -36,4 +37,13 @@ std::list<Character>::iterator Line::GetIteratorAtPosition(size_t position) {
 	auto it = mCharacters.begin();
 	std::advance(it, position);
 	return it;
+}
+
+glm::vec2 Line::GetLocation() const {
+	return mLocation;
+}
+
+void Line::SetLocation(glm::vec2 location) {
+	std::cout << "Settings location to: " << location.x << ", " << location.y << std::endl;
+	mLocation = location;
 }

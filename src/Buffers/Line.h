@@ -17,8 +17,11 @@ public:
 	std::list<Character>::iterator GetIteratorAtPosition(size_t position);
 	std::vector<float> mOffsets;
 	float GetOffset(int col);
+	glm::vec2 GetLocation() const;
+	void SetLocation(glm::vec2 location);
 
 private:
 	std::list<Character> mCharacters;
+	glm::vec2 mLocation{0};
 
 };

@@ -1,13 +1,15 @@
 #pragma once
-#include "Buffers/Line.h"
 #include <glad/glad.h>
 #include <glm/glm.hpp>
+
+#include "Buffers/Line.h"
+#include "Buffers/Types.h"
 
 class Cursor {
 public:
 	Cursor();
 
-	void Draw(glm::ivec2 position, std::list<Line>::iterator activeLine, float winOffset);
+	void Draw(glm::ivec2 position, LineStructure_t::iterator activeLine, float winOffset);
 	void SetCursorHeight(float cursorHeight);
 
 private:

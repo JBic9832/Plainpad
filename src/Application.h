@@ -2,12 +2,14 @@
 
 #include <glm/glm.hpp>
 
-#include <memory>
-
-#include "Buffers/TextFile.h"
 #include "GUI/Rendering/Cursor.h"
 #include "GUI/Rendering/TextRenderer.h"
 #include "GUI/Window/Window.h"
+#include "GUI/Event/EventSystem.h"
+#include "GUI/Event/InputManager.h"
+
+#include <memory.h>
+#include "Buffers/TextFile.h"
 
 enum ApplicationMode {
 	NORMAL = 0,
@@ -16,21 +18,21 @@ enum ApplicationMode {
 
 class Application {
 public:
-    Application();
+    Application(EventSystem& e);
     ~Application();
 
     void Run();
 
 
 private:
-    glm::ivec2 mCursorPos;
-    std::shared_ptr<TextFile> mTextFile;
-	ApplicationMode mAppMode;
-    std::list<Line>::iterator mActiveLine;
-    Cursor mCursor;
     Window mAppWindow;
+    glm::ivec2 mCursorPos;
+	ApplicationMode mAppMode;
+    Cursor mCursor;
     TextRenderer mTextRenderer;
     bool mRunning;
+	InputManager mInputManager;
+	std::shared_ptr<TextFile> mTextFile;
     
     glm::mat4 mProjection = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f);
 
