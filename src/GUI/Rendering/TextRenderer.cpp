@@ -64,12 +64,19 @@ void TextRenderer::RenderLine(std::shared_ptr<Line> line, float x, float y, floa
 
 void TextRenderer::RenderFile(TextFile& file, glm::vec3 color, const Window& win) {
     int lineNumber = 1;
-    for (auto& line : file.GetLines()) {
+	std::list<std::shared_ptr<Line>> lines = file.GetLines();
+    for (auto it = lines.begin(); it != lines.end(); ++it) {
         float relPos = ((FontMap::GetGlyphHeight() + 3) * lineNumber);
 		float xPos = 15.0f;
 		float yPos = static_cast<float>(win.GetHeight()) - relPos - FontMap::GetGlyphHeight();
-		RenderLine(line, xPos, yPos, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
-		line->SetLocation({xPos, yPos});
+
+		size_t pos = std::distance(lines.begin(), it); 
+		size_t active = file.GetActiveLineBuffer();
+
+		if (pos != active)
+			RenderLine(*it, xPos, yPos, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+
+		(*it)->SetLocation({xPos, yPos});
 		++lineNumber;
     }
 }

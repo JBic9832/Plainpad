@@ -20,16 +20,16 @@ public:
     void InsertLine(size_t position, const std::string& text);
     LineStructure_t::iterator GetLineIterator(size_t position);
     LineStructure_t GetLines() const;
-	Line GetActiveLineBuffer() const;
-	void PullLineToEditBuffer(LineStructure_t::iterator target);
+	size_t GetActiveLineBuffer();
+	void PullLineToEditBuffer(size_t target);
 
 private:
 	void flushEditBuffer();
 
 private:
 	mutable std::mutex mMutex;
-    std::list<std::shared_ptr<Line>> mLines;
-	std::list<std::shared_ptr<Line>>::iterator mActiveLine;
+    LineStructure_t mLines;
+	LineStructure_t::iterator mActiveLine;
 	Line mEditBuffer;
 	bool mEditBufferDirty = false;
 

@@ -48,6 +48,15 @@ LineStructure_t TextFile::GetLines() const {
     return lines;
 }
 
+void  TextFile::PullLineToEditBuffer(size_t target) {
+	std::cout << "Pulling " << target << " into buffer.\n";
+	auto it = GetLineIterator(target);
+	mActiveLine = it;
+}
+
+size_t TextFile::GetActiveLineBuffer() {
+	return std::distance(mActiveLine, mLines.begin());
+}
 
 
 

@@ -25,11 +25,14 @@ void Application::Run() {
 
 	// Test lines
 	mTextFile->InsertLine(0, "This is a test for cursor...");
-	mTextFile->InsertLine(0, "This is a test for cursor...");
-	mTextFile->InsertLine(0, "This is a test for cursor...");
+	mTextFile->InsertLine(1, "This is a test for cursor...");
+	mTextFile->InsertLine(2, "This is a test for cursor...");
+	mTextFile->InsertLine(3, "This is a test for cursor...");
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	mTextFile->PullLineToEditBuffer(mCursorPos.y);
 
 	while (!mAppWindow.ShouldClose()) {
 		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -51,13 +54,17 @@ void Application::Run() {
 		}
 
 		if(InputManager::GetKeyDown(GLFW_KEY_UP)) {
-			if (!(mCursorPos.y - 1 < 0))
+			if (!(mCursorPos.y - 1 < 0)) {
 				mCursorPos.y -= 1;
+				mTextFile->PullLineToEditBuffer(mCursorPos.y);
+			}
 		}
 
 		if(InputManager::GetKeyDown(GLFW_KEY_DOWN)) {
-			if(!(mCursorPos.y + 1 > mTextFile->GetLines().size() - 1))
+			if(!(mCursorPos.y + 1 > mTextFile->GetLines().size() - 1)) {
 				mCursorPos.y += 1;
+				mTextFile->PullLineToEditBuffer(mCursorPos.y);
+			}
 		}
 
 		mInputManager.EndFrame();
