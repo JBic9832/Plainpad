@@ -42,11 +42,11 @@ void Application::Run() {
 		cursorShader.setUniformFloat("time", glfwGetTime());
 		mCursor.Draw(mCursorPos, mTextFile->GetLineIterator(mCursorPos.y), mAppWindow.GetHeight());
 
-		if(InputManager::GetKeyDown(GLFW_KEY_RIGHT)) {
+		if(InputManager::GetKeyDown(GLFW_KEY_RIGHT) && mCursorPos.x + 1 <= mTextFile->GetLineIterator(mCursorPos.y)->get()->GetCharacters().size()) {
 			mCursorPos.x += 1;
 		}
 
-		if(InputManager::GetKeyDown(GLFW_KEY_LEFT)) {
+		if(InputManager::GetKeyDown(GLFW_KEY_LEFT) && mCursorPos.x - 1 >= 0) {
 			mCursorPos.x -= 1;
 		}
 
